@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Caption:</strong>
+  <%= @post.caption %>
+</p>
+
+<p><%= image_tag @post.image.url(:medium) %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= link_to @post.user.user_name, profile_path(@post.user.user_name) %>
+</p>
+
+<% if @post.comments.length != 0 %>
+ <p>Average score: <%= average_score(@post) %></p>
+
+<h2>Comments: </h2>
+	<% @post.comments.order('created_at DESC').each do |comment| %>
+		<p>By <%= comment.user.user_name %>, score: <%= comment.score %></p>
+		<p><%= comment.content %>
+		<% if user_signed_in? and comment.user_id == current_user.id %>
+			<%= link_to '', post_comment_path(@post, comment), method: :delete, data: { confirm: 'Are you sure?' }, :class => "glyphicon glyphicon-remove delete-comment" %></p>
+		<% end %>
+		<p>______________________________________________________________________________</p>
+	<% end %>
+<% end %>
+
+<% if user_signed_in? %>
+	<h2>Add comment:</h2>
+	 <%= form_for [@post, @post.comments.build] do |f| %>
+	  	Text: <%= f.text_field :content %><br>
+	  	Score: <%= f.select :score, [5,4,3,2,1] %>
+		<%= f.button :submit %>
+	 <% end %>
+ <% end %> 
+
+
+ <%= link_to 'Edit', edit_post_path(@post) %> |
+
+<%= link_to 'Back', root_path %>

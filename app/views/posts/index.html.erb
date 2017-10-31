@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Posts</h1>
+<div class="container-fluid">
+    <div class="row">
+      <% @posts.each do |post| %>
+	      <div class="col-xs-6 col-sm-4"><%= link_to (image_tag post.image.url(:thumb)), post_path(post) %><br>
+	      <%= link_to post.caption, post_path(post) %><br>
+	      by: <%= link_to post.user.user_name, profile_path(post.user.user_name) %><br>
+	      </div>
+      <% end %>
+    </div> 
+</div>
+
+<%= paginate @posts %>
+
+
+
